@@ -8,6 +8,8 @@ import {
   Patch,
   Delete,
   NotFoundException,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { CreateUserDto } from './dtos/user-create.dto';
 import { UsersService } from './users.service';
@@ -20,6 +22,7 @@ export class UsersController {
     this.usersService.create(body.email, body.password);
   }
   //   /auth/1
+  @UseInterceptors(ClassSerializerInterceptor) // hide the exclude column that define in entity as exclude
   @Get('/:id')
   async findUser(@Param('id') id: string) {
     const user = await this.usersService.findOne(parseInt(id));
