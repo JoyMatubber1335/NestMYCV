@@ -14,6 +14,8 @@ import {
 import { CreateUserDto } from './dtos/user-create.dto';
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dtos/user-update.dto';
+import { SerializerInterceptor } from 'src/interceptor/serialize.interceptor';
+
 @Controller('auth')
 export class UsersController {
   constructor(private usersService: UsersService) {}
@@ -22,9 +24,10 @@ export class UsersController {
     this.usersService.create(body.email, body.password);
   }
   //   /auth/1
-  @UseInterceptors(ClassSerializerInterceptor) // hide the exclude column that define in entity as exclude
+  @UseInterceptors(SerializerInterceptor) // hide the exclude column that define in entity as exclude
   @Get('/:id')
   async findUser(@Param('id') id: string) {
+    console.log('response is processing.....');
     const user = await this.usersService.findOne(parseInt(id));
     console.log(user);
     if (!user) {
